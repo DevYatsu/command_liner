@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 from exceptions import ParameterNameError, ParametersNumberError, ScriptError
-import re
 
 
 class Command:
@@ -17,21 +16,21 @@ class Command:
     def set_description(self, new_description: str):
         self.description = new_description
         return self
-    
-    def set_help(self, new_msg:str):
+
+    def set_help(self, new_msg: str):
         self.help_msg = new_msg
         return self
 
     def get_description(self):
         if self.description is None:
             return "No description was set for this command."
-        
+
         return self.description
 
     def get_help(self):
         if self.help_msg is None:
             return "No help message was set for this command."
-        
+
         return self.help_msg
 
     def set_script(self, script: str, *args, **kwargs):
@@ -85,27 +84,19 @@ class Command:
             self.add_parameter(param)
         return self
 
-    def parse(self, command_line):
+    def parse(self, command_line_list: str):
         if len(self.script) > 0 and self.script[0] is None:
             raise ScriptError(
                 f"No script was set to be run on this command call: '{self.name}'")
 
-        parameters = []
-        command_components = re.findall(r'"[^"]+"|\S+', command_line)
-        for component in command_components:
-            if component.startswith('"') and component.endswith('"'):
-                parameters.append(component[1:-1])
-            else:
-                parameters.append(component)
+        parameters = command_line_list[1:]
 
-        parameters = parameters[1:]
-        
         if len(parameters) > 0:
             if parameters[0] == "--description":
                 return print(f'DESCRIPTION:\n{self.get_description()}\n')
             elif parameters[0] == "--help":
                 return print(f'HELP MESSAGE:\n{self.get_help()}\n')
-        
+
         order = [*self.params_order, *self.optional_params_order]
 
         if len(parameters) < len(self.params_order):

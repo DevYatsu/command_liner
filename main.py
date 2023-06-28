@@ -1,10 +1,11 @@
 import os
+import sys
 from command import Command
 from command_liner import CommandLiner
 
-# set the prefix to run your commands once the script is usable, 
+# set the prefix to run your commands once the script is usable,
 # that is after running generate-sh command
-commands_prefix = "cl"
+commands_prefix = "commandliner"
 command_client = CommandLiner(commands_prefix)
 
 create_command = Command("create", "A command for creating a file").add_parameter("file_name").set_script('''
@@ -46,7 +47,7 @@ file.close()
 ''', "file_name", "content", "mode")
 
 # DO NOT REMOVE THIS COMMAND
-# run to create the shell script 
+# run to create the shell script
 generate_sh_command = Command("generate-sh", "A command for generating a sh file to run the script").set_script(f'''
 
 def generate_sh_script():    
@@ -158,4 +159,5 @@ commands = list([create_command, remove_command, rename_command,
                  get_command, write_command, generate_sh_command, destruct_sh_command])
 
 # run the script
-command_client.append_commands(*commands).list_commands().run_command()
+command_client.append_commands(
+    *commands).list_commands().run_command(sys.argv)
