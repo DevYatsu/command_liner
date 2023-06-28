@@ -118,5 +118,4 @@ class Command:
     def run(self):
         executable_script = self.dynamise_script()
         exec(executable_script)
-        print("Command ran successfully")
         return None

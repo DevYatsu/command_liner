@@ -51,6 +51,7 @@ class CommandLiner:
             else:
                 command_components = args_list[1:]
         else:
+            self.list_commands()
             command_components = shlex.split(input("Enter a command: "))
 
         if command_components[0].lower() not in self.commands:
