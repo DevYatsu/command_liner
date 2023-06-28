@@ -17,6 +17,10 @@ class Command:
     def set_description(self, new_description: str):
         self.description = new_description
         return self
+    
+    def set_help(self, new_msg:str):
+        self.help_msg = new_msg
+        return self
 
     def get_description(self):
         if self.description is None:
@@ -80,20 +84,6 @@ class Command:
         for param in args:
             self.add_parameter(param)
         return self
-
-    def delete_parameter(self, name: str):
-        if not name in self.params:
-            raise ParameterNameError(
-                f"This parameter does not exist: {name}")
-        else:
-            del self.params[name]
-        return self
-
-    def get_parameter(self, name: str):
-        if name in self.params:
-            raise ParameterNameError(
-                f"This parameter does not exist: {name}")
-        return self.params[name]
 
     def parse(self, command_line):
         if len(self.script) > 0 and self.script[0] is None:
