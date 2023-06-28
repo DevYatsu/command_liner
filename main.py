@@ -30,8 +30,8 @@ file.write("{}".format(data))
 file.close()
 ''', "url", "file_name")
 
-generate_sh_command = Command("generate-sh", "allows to generate a sh file to run the script").add_params("script_name").set_script(f'''
-def generate_sh_script(script_name):
+generate_sh_command = Command("generate-sh", "allows to generate a sh file to run the script").set_script(f'''
+def generate_sh_script():
     import os
 
     script_path = "/usr/local/bin/{commands_prefix}.sh"
@@ -48,7 +48,7 @@ def generate_sh_script(script_name):
     import stat
     os.chmod(script_path, stat.S_IRWXU)  # Add execute permissions to the owner
     
-generate_sh_script("+++")
+generate_sh_script()
 ''')
 
 write_command = Command("write", "allows writing content to a file").add_params("file_name", "content").add_optional_parameter("mode").set_script('''
@@ -65,8 +65,8 @@ file.close()
 ''', "file_name", "content", "mode")
 
 help_command = Command("help", "A command to get help").set_script(f'''
-print("To get informations on a specific command:")       
-print(f"* {commands_prefix} <command name> help")                                                                                                               
+print("To get informations on a specific command:\\n")       
+print(f"* {commands_prefix} <command name> help\\n")                                                                                                               
 ''')
 
 

@@ -28,7 +28,7 @@ class CommandLiner:
         return self
 
     def run_command(self) -> Command:
-        command_line = input("Enter the command line: ")
+        command_line = input("Enter a command: ")
 
         command_components = command_line.split(" ")
 
