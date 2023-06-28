@@ -1,5 +1,5 @@
 from command import Command
-from exceptions import CommandLinerNameError, CommandNameError
+from exceptions import CommandNameError
 
 
 class CommandLiner:
