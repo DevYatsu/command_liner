@@ -66,7 +66,9 @@ file.close()
 
 help_command = Command("help", "A command to get help").set_script(f'''
 print("To get informations on a specific command:\\n")       
-print(f"* {commands_prefix} <command name> help\\n")                                                                                                               
+print(f"\\t* <command name> --help\\n")      
+print("To see a command description:\\n")       
+print(f"\\t* <command name> --description\\n")                                                                                                               
 ''')
 
 

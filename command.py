@@ -8,6 +8,7 @@ class Command:
     def __init__(self, name: str, description: str = None):
         self.name: str = name
         self.description: str = description
+        self.help_msg: str = None
         self.script: list[str] = None
         self.params: list = {}
         self.params_order: list[str] = []
@@ -16,6 +17,18 @@ class Command:
     def set_description(self, new_description: str):
         self.description = new_description
         return self
+
+    def get_description(self):
+        if self.description is None:
+            return "No description was set for this command."
+        
+        return self.description
+
+    def get_help(self):
+        if self.help_msg is None:
+            return "No help message was set for this command."
+        
+        return self.help_msg
 
     def set_script(self, script: str, *args, **kwargs):
         # self.script contains the script as the list[0] value
