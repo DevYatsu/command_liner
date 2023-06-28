@@ -19,11 +19,14 @@ class CommandLiner:
         return self
             
     def append_command(self, command: Command):
-        if command.name in self.commands:
+        if command.name != command.name.lower():
+            raise ValueError(f"Command names must be lowercase: '{command.name}'")
+        
+        if command.name.lower() in self.commands:
             raise CommandNameError(
                 f"This command name is already taken: {command.name}")
         else:
-            self.commands[command.name] = command
+            self.commands[command.name.lower()] = command
         return self
 
     def append_commands(self, *args, **kwargs):
@@ -42,13 +45,13 @@ class CommandLiner:
 
         command_components = command_line.split(" ")
 
-        if command_components[0] not in self.commands:
+        if command_components[0].lower() not in self.commands:
             raise CommandNameError(
                 f"This command does not exist: '{command_components[0]}'")
             
-        if command_components[0] == "help":
+        if command_components[0].lower() == "help":
             print("Command Line Interface realised with command_liner by DevYatsu on github")
             self.list_commands()
             return print("To get informations on a specific command:\n\t* <command name> --help\nTo see a command description:\n\t* <command name> --description\n")
             
-        return self.commands[command_components[0]].parse(command_line)
+        return self.commands[command_components[0].lower()].parse(command_line)
