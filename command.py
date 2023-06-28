@@ -9,7 +9,7 @@ class Command:
         self.name: str = name
         self.description: str = description
         self.help_msg: str = None
-        self.script: list[str] = None
+        self.script: list[str] = []
         self.params: list = {}
         self.params_order: list[str] = []
         self.optional_params_order: list[str] = []
@@ -96,7 +96,7 @@ class Command:
         return self.params[name]
 
     def parse(self, command_line):
-        if self.script[0] is None:
+        if len(self.script) > 0 and self.script[0] is None:
             raise ScriptError(
                 f"No script was set to be run on this command call: '{self.name}'")
 
@@ -109,7 +109,13 @@ class Command:
                 parameters.append(component)
 
         parameters = parameters[1:]
-
+        
+        if len(parameters) > 0:
+            if parameters[0] == "--description":
+                return print(f'\nDESCRIPTION:\n{self.get_description()}\n')
+            elif parameters[0] == "--help":
+                return print(f'\HELP MESSAGE:\n{self.get_help()}\n')
+        
         order = [*self.params_order, *self.optional_params_order]
 
         if len(parameters) < len(self.params_order):
