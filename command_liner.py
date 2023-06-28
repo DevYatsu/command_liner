@@ -10,6 +10,9 @@ class CommandLiner:
         }
 
     def list_commands(self):
+        if len(self.commands) == 1 and self.commands["help"] is not None:
+            return self
+        
         print("Commands list:")
         for key in self.commands.keys():
             print(f"* {key}")
@@ -30,6 +33,11 @@ class CommandLiner:
         return self
 
     def run_command(self) -> Command:
+        if len(self.commands) == 0: 
+            return print("No commands created.")
+        if len(self.commands) == 1 and self.commands["help"] is not None:
+            return print("No commands created.")
+        
         command_line = input("Enter a command: ")
 
         command_components = command_line.split(" ")
