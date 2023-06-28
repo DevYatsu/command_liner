@@ -112,9 +112,9 @@ class Command:
         
         if len(parameters) > 0:
             if parameters[0] == "--description":
-                return print(f'\nDESCRIPTION:\n{self.get_description()}\n')
+                return print(f'DESCRIPTION:\n{self.get_description()}\n')
             elif parameters[0] == "--help":
-                return print(f'\HELP MESSAGE:\n{self.get_help()}\n')
+                return print(f'HELP MESSAGE:\n{self.get_help()}\n')
         
         order = [*self.params_order, *self.optional_params_order]
 
