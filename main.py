@@ -153,10 +153,28 @@ def remove_sh_file():
 remove_sh_file()
 ''')
 
+# first we create the command
+example_command = Command("example", "An example command.").set_help(
+    f"To run the command:\n\t* example <param1> <param2>").add_params("param1", "param2").add_optional_parameter("param3").set_script('''
+param1 = "+++"
+param2 = "+++"
+param3 = "+++"
+
+print(param1)  
+if param3 != "": # param3 is optional and set to "" if not add in command
+    print(param3)                                            
+print(param2)     
+print(param1)     
+print(param2) 
+if param3 != "":
+    print(param3)    
+print(param1)     
+
+''', "param1", "param2", "param3")
 
 # put all commands here
 commands = list([create_command, remove_command, rename_command,
-                 get_command, write_command, generate_sh_command, destruct_sh_command])
+                 get_command, write_command, generate_sh_command, destruct_sh_command, example_command])
 
 # run the script
 command_client.append_commands(

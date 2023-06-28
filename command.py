@@ -53,12 +53,13 @@ class Command:
         script, *args = self.script
         dynamised_script = script
         for arg in args:
+            print(self.params[arg][0])
             if self.params[arg][0] and not self.params[arg][1]:
                 dynamised_script = dynamised_script.replace(
                     "+++", self.params[arg][0], 1)
             else:
                 dynamised_script = dynamised_script.replace(
-                    "+++", "", 1)
+                    "+++", self.params[arg][0] if self.params[arg][0] != None else "", 1)
         return dynamised_script
 
     def add_parameter(self, name: str):
@@ -82,6 +83,11 @@ class Command:
     def add_params(self, *args):
         for param in args:
             self.add_parameter(param)
+        return self
+
+    def add_optional_params(self, *args):
+        for param in args:
+            self.add_optional_parameter(param)
         return self
 
     def parse(self, command_line_list: str):
