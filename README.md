@@ -106,11 +106,57 @@ print(param2)
 if param3 != "":
     print(param3)    
 print(param1)     
+```
 
+And if we add everything necessary to make it work...
+
+```python
+import sys
+from command import Command
+from command_liner import CommandLiner
+
+# set the prefix to run your commands once the script is usable,
+# that is after running generate-sh command
+commands_prefix = "commandliner"
+command_client = CommandLiner(commands_prefix)
+
+example_command = Command("example", "An example command.").set_help(
+    f"To run the command:\n\t* example <param1> <param2>").add_params("param1", "param2").add_optional_parameter("param3").set_script('''
+param1 = "+++"
+param2 = "+++"
+param3 = "+++"
+
+print(param1)  
+if param3 != "": # param3 is optional and set to "" if not add in command
+    print(param3)                                            
+print(param2)     
+print(param1)     
+print(param2) 
+if param3 != "":
+    print(param3)    
+print(param1)     
+
+# put all commands here
+commands = list([generate_sh_command, destruct_sh_command, example_command])
+
+# run the script
+command_client.append_commands(
+    *commands).run_command(sys.argv)
 ''', "param1", "param2", "param3")
 ```
 
 Ta daaa! That's it!
+
+## Make it executable globally
+
+Run `python main.py generate-sh`
+
+Use the command line interface anywhere: `prefix <your commands>`
+
+If you make changes in your main.py:
+- run `prefix destroy-sh`
+- rerun `python main.py generate-sh`
+- you can restart using you CLI
 
 ## LICENCE 
 MIT as always...
