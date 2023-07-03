@@ -18,6 +18,8 @@ You should find 7 files in this project:
 - command.py
 - exceptions.py
 - LICENSE
+- commands.py
+- initializer.py
 - main.py
 - README.md
 
@@ -27,18 +29,15 @@ You at least need the *.py* files to use command_liner.
 - **command.py** contains all the code regarding the creation of the command class
 - **command_liner.py** contains code on the commands_wrapper class
 - **exceptions.py** contains code regarding errors managing
-- **main.py** is the key file, containing all the llogic of the CLI
+- **commands.py** contains all the commands usable with the CLI
+- **initializer.py** contains the project config, that is the name of the CLI
+- **main.py** contains the code necessary to run the CLI
 
-You can look at all the files to understand the logic of the project, and modify them if necessary. However if you need a simple use of command_liner just open **main.py** in your code editor.
+You can look at all the files to understand the logic of the project, and modify them if necessary. However if you need a simple use of command_liner just open **initializer.py**, **main.py** and **commands.py** in your code editor.
 
-Now that you're in **main.py** file, you can notice the file is sort of separated in 3 parts:
-1. The imports and the client iniatializer
-2. All the commands declarations
-3. Ready the client to run
+On **initializer.py** file, set `commands_prefix` variable to whichever name you want to give to your client, it's the prefix you want to call your comands with.
 
-First, you can edit *commands_prefix* variable to set the prefix you want to call your comands with. 
-
-Then, you can take a look at the commands and understand how to create them, actually, it is rather simple, it's done in a few steps only:
+Then, you can take a look at the commands and understand how to create them in **commands.py**, actually, it is rather simple, it's done in a few steps only:
 1. Init a command instance with two arguments, its name and its description
 2. You can also set description separately with `.set_description()`, description will be displayed when running `command_name --description`
 3. Set a helper message with `.set_help()`, will be displayed when running `command_name --help`
@@ -46,11 +45,15 @@ Then, you can take a look at the commands and understand how to create them, act
 5. Add **optional** parameters with `.add_optional_parameter()` or `.add_optional_params()` methods, can be add after the required ones when running the command
 6. Use `.set_script()` to write the script run on command use, takes as first parameter the script to run and as others the parameters to use in the script, set them here in the position you want them to be called when using the command
 
+When you're done with creating your commands, import them in **main.py** and add them in `commands` list.
+
 ### Example
 
 Let's see a simple example of a command definition, we will suppose that all theimports are doeand that the client is generated
 
 ``` python
+### in commands.py
+
 # first we create the command
 example_command = Command("example", "An example command.")
 
@@ -81,10 +84,12 @@ print(param1)
 
 ''', "param1", "param2", "param3")
 
-# and do not forget to put everything in commands array:
+
+### in main.py
+# do not forget to put everything in commands list:
 
 commands = list([generate_sh_command, destruct_sh_command, example_command])
-# at least need the two first commands to run the script and destroy it 
+# required at least the generate_sh_command, destruct_sh_command commands to run the shell script and destroy it 
 ```
 
 It's as simple as that!
@@ -111,17 +116,12 @@ print(param1)
 And if we add everything necessary to make it work...
 
 ```python
-import sys
+### in commands.py
+from initializer import get_prefix
 from command import Command
-from command_liner import CommandLiner
-
-# set the prefix to run your commands once the script is usable,
-# that is after running generate-sh command
-commands_prefix = "commandliner"
-command_client = CommandLiner(commands_prefix)
 
 example_command = Command("example", "An example command.").set_help(
-    f"To run the command:\n\t* example <param1> <param2>").add_params("param1", "param2").add_optional_parameter("param3").set_script('''
+    f"To run the command:\n\t* {get_prefix()} example <param1> <param2>").add_params("param1", "param2").add_optional_parameter("param3").set_script('''
 param1 = "+++"
 param2 = "+++"
 param3 = "+++"
@@ -135,6 +135,13 @@ print(param2)
 if param3 != "":
     print(param3)    
 print(param1)     
+''', "param1", "param2", "param3")
+
+
+## in main.py
+import sys
+from commands import example_command, generate_sh_command, destruct_sh_command
+from initializer import command_client
 
 # put all commands here
 commands = list([generate_sh_command, destruct_sh_command, example_command])
@@ -142,7 +149,6 @@ commands = list([generate_sh_command, destruct_sh_command, example_command])
 # run the script
 command_client.append_commands(
     *commands).run_command(sys.argv)
-''', "param1", "param2", "param3")
 ```
 
 Ta daaa! That's it!
