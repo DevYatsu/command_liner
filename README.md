@@ -95,9 +95,13 @@ commands = list([generate_sh_command, destruct_sh_command, example_command])
 It's as simple as that!
 
 To make it even simpler, put everything together:
-```python  
+```python
+### in commands.py
+from initializer import get_prefix
+from command import Command
+
 example_command = Command("example", "An example command.").set_help(
-    f"To run the command:\n\t* example <param1> <param2>").add_params("param1", "param2").add_optional_parameter("param3").set_script('''
+    f"To run the command:\n\t* {get_prefix()} example <param1> <param2>").add_params("param1", "param2").add_optional_parameter("param3").set_script('''
 param1 = "+++"
 param2 = "+++"
 param3 = "+++"
